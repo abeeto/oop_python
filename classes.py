@@ -1,11 +1,14 @@
 class person:
+    all = []
     def __init__(self, name, age, weight, height, type = "base"):
         self.name = name
         self.age = age
         self.weight = weight
         self.height = height
         self.type = type
-        
+        person.all.append(self)
+    # def __repr__(self):
+    #     return(f"{self.name},{self.age},{self.weight},{self.height},{self.type}")
     def display_stats(self):
         print(f"""Name: {self.name} \nAge: {self.age} \nName: {self.weight} kg \nHeight: {self.height} cm \nType:{self.type}""")
 
@@ -25,9 +28,8 @@ class fighter(person):
     
 
 class items:
-    def __init__(self, name, pickable = False, type = "Base"):
+    def __init__(self,name, type = "Base"):
         self.name = name
-        self.pickable = pickable
         self.type = type
     def giveName(self):
         return self.name
@@ -37,7 +39,8 @@ class items:
 # class potion(items):
 
 class weapons(items):
-    def __init__(self, damage, speed,cooldown, freq, equiped = False):
+    def __init__(self, name,damage, speed,cooldown, freq, equiped = False):
+        self.name = name
         self.damage = damage
         self.speed = speed
         self.cooldown = cooldown
@@ -46,16 +49,22 @@ class weapons(items):
     def equip(self):
         if(self.equiped == False):
             self.equiped = True
-            print(f"""Ëquiped {super().giveName}""")
+            print(f"""Equiped {self.name}""")
         else:
             self.equiped = False
-            print(f"""Removed {super().giveName()}""")
+            print(f"""Removed {self.name}""")
 
     
 
 
-myMain = fighter("Hiro", "18", "74", "182")
-longsword = weapons("longsword", 24,13,10,0.8) 
-print(myMain.health)
-myMain.takeDamage(myMain.dealDamage())
-print(myMain.health)
+
+#testing
+myMain = person("Hiro", "18", "74", "182")
+ogre = person("Shrek", "43", "300", "220")
+
+for instance in person.all:
+    print(instance.age)
+
+longsword = weapons("rusty longsword", 24,13,10, 5, 0.8)
+longsword.equip()
+longsword.equip()
