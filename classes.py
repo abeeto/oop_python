@@ -1,3 +1,6 @@
+from importlib import import_module
+import csv
+
 class person:
     all = []
     def __init__(self, name, age, weight, height, type = "base"):
@@ -7,10 +10,19 @@ class person:
         self.height = height
         self.type = type
         person.all.append(self)
-    # def __repr__(self):
-    #     return(f"{self.name},{self.age},{self.weight},{self.height},{self.type}")
+    def __repr__(self):
+        return(f"person[{self.name},{self.age},{self.weight},{self.height},{self.type}]")
     def display_stats(self):
         print(f"""Name: {self.name} \nAge: {self.age} \nName: {self.weight} kg \nHeight: {self.height} cm \nType:{self.type}""")
+    
+    @classmethod
+    def export_to_CSV(cls):
+        with open('persons.csv', 'r') as f:
+            reader = csv.reader(f, delimiter = "\t")
+            items = list(reader)
+        for item in items:
+            print(item)
+
 
 
 #inheritence
@@ -62,9 +74,13 @@ class weapons(items):
 myMain = person("Hiro", "18", "74", "182")
 ogre = person("Shrek", "43", "300", "220")
 
-for instance in person.all:
-    print(instance.age)
+# for instance in person.all:
+#     print(instance.age)
 
-longsword = weapons("rusty longsword", 24,13,10, 5, 0.8)
-longsword.equip()
-longsword.equip()
+# print(person.all)
+
+person.export_to_CSV()
+
+# longsword = weapons("rusty longsword", 24,13,10, 5, 0.8)
+# longsword.equip()
+# longsword.equip()
