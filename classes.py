@@ -4,83 +4,77 @@ import csv
 class person:
     all = []
     def __init__(self, name, age, weight, height, type = "base"):
-        self.name = name
+        self.__name = name
         self.age = age
         self.weight = weight
         self.height = height
         self.type = type
+        if self.type == None:
+            self.type = "base"
         person.all.append(self)
+    @property
+    def name(self):
+        print("you are trying to receive the name")
+        return self.__name
+
+    @name.setter
+    def name(self, value):
+        print("you are trying to change the name")
+        self.__name = value
+
     def __repr__(self):
-        return(f"person[{self.name},{self.age},{self.weight},{self.height},{self.type}]")
+        return(f"{self.__class__.__name__}[{self.name},{self.age},{self.weight},{self.height},{self.type}]")
     def display_stats(self):
         print(f"""Name: {self.name} \nAge: {self.age} \nName: {self.weight} kg \nHeight: {self.height} cm \nType:{self.type}""")
     
+    
+    #we use @ as a decorator to declare a class method
     @classmethod
-    def export_to_CSV(cls):
+    def importFromCSV(cls):
         with open('persons.csv', 'r') as f:
-            reader = csv.reader(f, delimiter = "\t")
+            reader = csv.DictReader(f, delimiter = ",")
             items = list(reader)
         for item in items:
-            print(item)
+            person(
+                name = item.get('name'),
+                age = float(item.get('age')),
+                weight = float(item.get('weight')),
+                height = float(item.get('height')),
+                type = item.get('type'),
+            )
+    #staticMethod - does not pass class method as an argument
+    #treat static method like a normal, isolated function
 
-
-
+    @staticmethod
+    def is_integer(num):
+        if(isinstance(num, float)):
+            return num.is_integer()
+        elif isinstance(num, int):
+            return True
+        else:
+            return False
 #inheritence
 class fighter(person):
-    health = 100
-    speed = 30
-    attackSpeed = 35
-    base_att = 15
-    base_defence = 35
+    all = []
+    def __init__(self, name, age, weight, height, type = "fighter"):
+        super().__init__(name, age, weight, height,type)
+        self.health = 100
+        self.speed = 15
+        self.attackSpeed = 35
+        self.base_att = 15
+        self.base_def = 35
+        fighter.all.append(self)
     def takeDamage(self, damageGiven):
-         damageGiven *= (1 - self.base_defence/1000)
-         self.health -= damageGiven
+        damageGiven *= (1 - self.base_def/1000)
+        self.health -= damageGiven
     def dealDamage(self):
         return self.base_att
+    def displayStats(self):
+        return super().display_stats()
+        # return super().display_stats()  + f"Health: {self.health} \nSpeed: {self.speed} \nAttack speed: {self.attackSpeed} \nAttack: {self.base_att} \nDefence: {self.base_def} "
     
-
-class items:
-    def __init__(self,name, type = "Base"):
-        self.name = name
-        self.type = type
-    def giveName(self):
-        return self.name
-
-
-# class armor(items):
-# class potion(items):
-
-class weapons(items):
-    def __init__(self, name,damage, speed,cooldown, freq, equiped = False):
-        self.name = name
-        self.damage = damage
-        self.speed = speed
-        self.cooldown = cooldown
-        self.freq = freq
-        self.equiped = equiped
-    def equip(self):
-        if(self.equiped == False):
-            self.equiped = True
-            print(f"""Equiped {self.name}""")
-        else:
-            self.equiped = False
-            print(f"""Removed {self.name}""")
-
-    
-
-
-
-#testing
-myMain = person("Hiro", "18", "74", "182")
-ogre = person("Shrek", "43", "300", "220")
-
-# for instance in person.all:
-#     print(instance.age)
-
-# print(person.all)
-
-person.export_to_CSV()
-
-# longsword = weapons("rusty longsword", 24,13,10, 5, 0.8)
-# longsword.equip()
-# longsword.equip()
+person.importFromCSV()
+# fighterHiro = fighter("Alex", 19, 190, 176)
+# print(fighterHiro.health)
+# fighterHiro.takeDamage(fighterHiro.dealDamage())
+# print(fighterHiro.displayStats())
