@@ -20,15 +20,20 @@
 
 
 #create a deck of cards:
+import math
+import random as rnd
+
 class Card:
     def __init__(self):
         self._suit = "nothing"
         self._value = 0
     @property
     def value(self):
+        print("Card's Value: " + str(self._value))
         return self._value
     @property
     def suit(self):
+        print("Card's Suit: " + str(self._suit))
         return self._suit
     @suit.setter
     def suit(self, s):
@@ -38,7 +43,7 @@ class Card:
             print("Not a possible suit")
     @value.setter
     def value(self, x):
-        if x in list(range(2,10)):
+        if x in list(range(2,11)):
             self._value = x
         elif x in [1, 11, 12, 13]:
             valueRole = {1: "A", 11: "J", 12: "Q", 13: "K"}
@@ -48,7 +53,30 @@ class Card:
         else: 
             print( "Not a possible value")
 
+class Deck:
+    def __init__(self):
+        self.all = []
+        suitsToAssign = ["hearts", "clubs", "diamonds", "spades"]
+        for i in range(4):
+            for x in range(13):
+                self.all.append(Card())
+                self.all[i*13+x].value = x+1
+                self.all[i*13+x].suit = suitsToAssign[i]
+                self.all[i*13+x].value
+                self.all[i*13+x].suit
+
+    def deal(self):
+        randCard = rnd.randint(0, 51)
+        return self.all[randCard]
+    def shuffle(self):
+        rnd.shuffle(self.all)
+        [x.value for x in self.all]
+        [x.suit for x in self.all]
 
 
+    
 
-
+newDeck = Deck()
+print("New Deck Shuffled")
+print("*****************")
+newDeck.shuffle()
